@@ -31,6 +31,11 @@ const [userDetail] = useLazyUserDetailsQuery();
     onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 500));
       const response = await login_user({data:{email:values.email,password:values.password}});
+
+      if (response?.error){
+        setErrorMessage("Invalid Credentials");
+        return;
+      }
       if (response?.data.access_token){
         
         localStorage.setItem("access",response?.data.access_token);

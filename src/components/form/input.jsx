@@ -116,6 +116,7 @@ const Input = ({
         className={`${classDetails} w-100 gap-3 ${
           isError ? "text-danger" : ""
         }`}
+        value={value}
         sx={styles}
         name={name}
         onChange={formik.handleChange}

@@ -59,7 +59,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage }) => {
+const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage ,handleModalOpen}) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -133,17 +133,12 @@ const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage }) => {
             )}
             <MenuItem
               onClick={() => (
-                setOpen({
-                  id: row.id,
-                  company_name: row.company_name,
-                  email: row.email,
-                  is_unblock: "delete",
-                }),
+                handleModalOpen(row),
                 handleMenuClose()
               )}
             >
               <ListItemIcon>
-                <Update size={18} weight="bold" />
+                <Update size={18} weight="bold"  />
               </ListItemIcon>
               <Typography
                 sx={{ lineHeight: "1", padding: "4px 0px" }}

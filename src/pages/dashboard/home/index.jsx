@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useListUsersQuery } from "../redux/dashboard.api";
+import UserModal from "./user_modal"
 import TabNavigation from "../../../components/tabNavigation";
 import BoxedInfo from "../../../components/boxedInfo";
 import User from "./user";
@@ -49,11 +50,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Home = () => {
-  let tabs = [
-    { label: "Super Admins", value: "" },
-    { label: "Artist Managers", value: "managers" },
-    { label: "Artists", value: "artists" },
-  ];
+
+  const {role} = useSelector(state=>state.auth.user)
+
+  let tabs = role ===2? [    { label: "Artists", value: "artists" },]:
+    role === 3? []:
+      [
+        { label: "Super Admins", value: "" },
+        { label: "Artist Managers", value: "managers" },
+        { label: "Artists", value: "artists" },
+      ];
+
+  const [modal_open,setModalOpen] = useState(null);
+
   const [open, setOpen] = useState(false);
 
   const [snacbarMessage, setSnackbarMesage] = useState(null);
@@ -73,6 +82,14 @@ const Home = () => {
     setSearchParams(searchParams);
   };
 
+  const handleModalOpen = (user_data) =>{
+    setModalOpen(user_data);
+  }
+
+  const handleModalClose = ()=>{
+    setModalOpen(null);
+  }
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -89,7 +106,6 @@ const Home = () => {
     page: currentPage,
     role: tab === "managers" ? 2 : "artists" === tab ? 3 : 1,
   });
-  console.log(response);
   return (
     <>
       <TabNavigation
@@ -151,6 +167,7 @@ const Home = () => {
                         isSubmitting={isSubmitting}
                         setSnackbarMesage={setSnackbarMesage}
                         key={key}
+                        handleModalOpen = {handleModalOpen}
                       />
                     ))}
                   </TableBody>
@@ -195,6 +212,10 @@ const Home = () => {
           {snacbarMessage}
         </Alert>
       </Snackbar>
+      <UserModal modal_open={modal_open}
+        handleModalClose={handleModalClose}
+        setSnackbarMessage={setSnackbarMesage}
+      />
     </>
   );
 };

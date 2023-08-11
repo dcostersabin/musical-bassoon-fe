@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {logout} from "../../../pages/auth/redux/auth.slice"
+import {apiSlice,apiTags} from "../../../app/apiSlice"
 // mui
 import { GroupOutlined, LogoutOutlined } from "@mui/icons-material";
 import { useTheme } from "@mui/material";
@@ -34,7 +35,7 @@ const Sidebar = ({ isOpenSidebar }) => {
       name: "Logout",
       icon: < LogoutOutlined />,
       role:0,
-      clickEvent:()=>dispatch(logout()),
+      clickEvent:()=>{dispatch(apiSlice.util.resetApiState());dispatch(apiSlice.util.invalidateTags(apiTags));dispatch(logout())},
     }
   ];
 

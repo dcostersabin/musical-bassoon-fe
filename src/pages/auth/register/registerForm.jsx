@@ -35,7 +35,7 @@ const RegisterForm = () => {
       phone: "",
       email: "",
       password: "",
-      role: 2,
+      role: 1,
     },
     onSubmit: async (values) => {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -52,7 +52,7 @@ const RegisterForm = () => {
     validationSchema: Yup.object().shape({
       first_name: Yup.string().required("First Name cannot be empty"),
       last_name: Yup.string().required("Last Name cannot be empty"),
-      dob: Yup.date().required("Ddate of Birth cannot be empty"),
+      dob: Yup.date().required("Date of Birth cannot be empty"),
       gender: Yup.string().required("Gender cannot be empty"),
       phone: Yup.string().required("Phone Number cannot be empty"),
       email: Yup.string().email().required("Email cannot be empty"),
