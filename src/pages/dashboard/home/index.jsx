@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useListUsersQuery } from "../redux/dashboard.api";
-import UserModal from "./user_modal"
+import RegisterUserModal from "./register_modal";
+import UploadModal from "./upload_modal";
+import UserModal from "./user_modal";
 import TabNavigation from "../../../components/tabNavigation";
 import BoxedInfo from "../../../components/boxedInfo";
 import User from "./user";
@@ -18,6 +20,7 @@ import {
   TableHead,
   TableRow,
   Box,
+  Button,
   Snackbar,
   Alert,
 } from "@mui/material";
@@ -39,37 +42,31 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  borderBottom: "1px solid",
-  borderColor: theme.palette.grey[25],
-  cursor: "pointer",
-
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.grey[10],
-  },
-}));
-
 const Home = () => {
+  const { role } = useSelector((state) => state.auth.user);
 
-  const {role} = useSelector(state=>state.auth.user)
+  let tabs =
+    role === 2
+      ? [{ label: "Artists", value: "artists" }]
+      : role === 3
+        ? []
+        : [
+          { label: "Super Admins", value: "" },
+          { label: "Artist Managers", value: "managers" },
+          { label: "Artists", value: "artists" },
+        ];
 
-  let tabs = role ===2? [    { label: "Artists", value: "artists" },]:
-    role === 3? []:
-      [
-        { label: "Super Admins", value: "" },
-        { label: "Artist Managers", value: "managers" },
-        { label: "Artists", value: "artists" },
-      ];
+  const [modal_open, setModalOpen] = useState(null);
 
-  const [modal_open,setModalOpen] = useState(null);
+  const [registerModal, setRegisterModal] = useState(false);
 
-  const [open, setOpen] = useState(false);
+  const [uploadModal, setUploadModal] = useState(false);
 
   const [snacbarMessage, setSnackbarMesage] = useState(null);
 
-  const snacbarOpen = Boolean(snacbarMessage);
+  const [uploadAlerts,setUploadAlerts] = useState(null);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const snacbarOpen = Boolean(snacbarMessage);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -82,13 +79,13 @@ const Home = () => {
     setSearchParams(searchParams);
   };
 
-  const handleModalOpen = (user_data) =>{
+  const handleModalOpen = (user_data) => {
     setModalOpen(user_data);
-  }
+  };
 
-  const handleModalClose = ()=>{
+  const handleModalClose = () => {
     setModalOpen(null);
-  }
+  };
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -121,7 +118,24 @@ const Home = () => {
             },
           },
         }}
+        subtab={
+          role !== 3 && (
+            <div className="d-flex flex-row gap-3">
+              { role === 2 && <Button variant="outlined" onClick={()=> setUploadModal(true)}>Upload</Button>}
+              <Button variant="outlined" onClick={() => setRegisterModal(true)}>
+                Add User
+              </Button>
+            </div>
+          )
+        }
       >
+        <div>
+        {uploadAlerts &&
+           <Alert sx={{ alignItems: 'center' }} severity="success">
+              {uploadAlerts}
+            </Alert>}
+
+        </div>
         <Box sx={{ padding: "0rem 1.5rem" }}>
           <div
             className="d-flex flex-column"
@@ -162,12 +176,9 @@ const Home = () => {
                     {response?.user?.map((row, key) => (
                       <User
                         row={row}
-                        open={open}
-                        setOpen={setOpen}
-                        isSubmitting={isSubmitting}
                         setSnackbarMesage={setSnackbarMesage}
                         key={key}
-                        handleModalOpen = {handleModalOpen}
+                        handleModalOpen={handleModalOpen}
                       />
                     ))}
                   </TableBody>
@@ -212,10 +223,19 @@ const Home = () => {
           {snacbarMessage}
         </Alert>
       </Snackbar>
-      <UserModal modal_open={modal_open}
+      <UserModal
+        modal_open={modal_open}
         handleModalClose={handleModalClose}
         setSnackbarMessage={setSnackbarMesage}
       />
+      <RegisterUserModal
+        modal_open={registerModal}
+        handleModalClose={() => setRegisterModal(false)}
+        setSnackbarMessage={setSnackbarMesage}
+      />
+      <UploadModal modal_open={uploadModal} handleModalClose={()=> setUploadModal(false)}
+      setUploadAlerts={setUploadAlerts}
+      / >
     </>
   );
 };

@@ -7,7 +7,6 @@ import {
   TableCell,
   TableRow,
   Stack,
-  Alert,
   Box,
   IconButton,
   Menu,
@@ -15,20 +14,10 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { Done, MoreVert, Update } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
+import { MoreVert, Update } from "@mui/icons-material";
 // icons and images
-import {
-  Check,
-  Eye,
-  Key,
-  LockOpen,
-  Prohibit,
-  Trash,
-  X,
-} from "@phosphor-icons/react";
+import { Eye, Trash } from "@phosphor-icons/react";
 
-import _ from "lodash";
 import { useDeleteUserMutation } from "../redux/dashboard.api";
 
 // ----------------------------------------------------------------------
@@ -59,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage ,handleModalOpen}) => {
+const User = ({ row, setSnackbarMesage, handleModalOpen, role }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -104,8 +93,6 @@ const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage ,handleModal
             <IconButton
               aria-label="more"
               id="long-button"
-              aria-controls={open ? "long-menu" : undefined}
-              aria-expanded={open ? "true" : undefined}
               aria-haspopup="true"
               onClick={handleMenuClick}
             >
@@ -118,27 +105,33 @@ const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage ,handleModal
             open={menuOpen}
             onClose={handleMenuClose}
           >
-            {searchParams.get("tab") === "artists" && (
-              <MenuItem onClick={() => (showUserDetail(), handleMenuClose())}>
-                <ListItemIcon>
-                  <Eye size={18} weight="bold" />
-                </ListItemIcon>
-                <Typography
-                  sx={{ lineHeight: "1", padding: "4px 0px" }}
-                  variant="subtitle4"
+            {searchParams.get("tab") === "artists" ||
+              (row?.role === 3 && (
+                <MenuItem
+                  onClick={() => {
+                    showUserDetail();
+                    handleMenuClose();
+                  }}
                 >
-                  View Songs
-                </Typography>
-              </MenuItem>
-            )}
+                  <ListItemIcon>
+                    <Eye size={18} weight="bold" />
+                  </ListItemIcon>
+                  <Typography
+                    sx={{ lineHeight: "1", padding: "4px 0px" }}
+                    variant="subtitle4"
+                  >
+                    View Songs
+                  </Typography>
+                </MenuItem>
+              ))}
             <MenuItem
-              onClick={() => (
-                handleModalOpen(row),
-                handleMenuClose()
-              )}
+              onClick={() => {
+                handleModalOpen(row);
+                handleMenuClose();
+              }}
             >
               <ListItemIcon>
-                <Update size={18} weight="bold"  />
+                <Update size={18} weight="bold" />
               </ListItemIcon>
               <Typography
                 sx={{ lineHeight: "1", padding: "4px 0px" }}
@@ -148,11 +141,11 @@ const User = ({ row, open, setOpen, isSubmitting, setSnackbarMesage ,handleModal
               </Typography>
             </MenuItem>
             <MenuItem
-              onClick={() => (
-                deleteUser({ id: row.id }),
-                setSnackbarMesage("Successfully Deleted"),
-                handleMenuClose()
-              )}
+              onClick={() => {
+                deleteUser({ id: row.id });
+                setSnackbarMesage("Successfully Deleted");
+                handleMenuClose();
+              }}
             >
               <ListItemIcon>
                 <Trash size={18} weight="bold" />

@@ -1,15 +1,14 @@
-import { Link, NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import { Link, NavLink } from "react-router-dom";
+import styled from "styled-components";
 // mui
-import { Accordion, Paper, Typography } from '@mui/material';
-
+import { Accordion, Paper, Typography } from "@mui/material";
 
 export const SidebarContainer = styled.div`
-  display: ${(props) => (props.isopen ? 'flex' : 'none')};
-  position: ${(props) => (props.isopen ? 'fixed' : 'relative')};
+  display: ${(props) => (props.isopen ? "flex" : "none")};
+  position: ${(props) => (props.isopen ? "fixed" : "relative")};
   z-index: 1;
-  width:250px;
-  box-shadow: '4px 0px 25px rgba(0, 0, 0, 0.03';
+  width: 250px;
+  box-shadow: "4px 0px 25px rgba(0, 0, 0, 0.03";
   @media (min-width: 1200px) {
     display: flex;
     flex-shrink: 0;
@@ -19,7 +18,7 @@ export const SidebarContainer = styled.div`
 export const SidebarWrapper = styled(Paper)`
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   position: relative;
-  box-shadow: '4px 0px 25px rgba(0, 0, 0, 0.03';
+  box-shadow: "4px 0px 25px rgba(0, 0, 0, 0.03";
   background-image: none;
   overflow-y: auto;
   display: flex;
@@ -106,7 +105,7 @@ export const SidebarNavItem = styled(NavLink)`
     background: ${(props) => props.activecolor};
     color: ${(props) => props.maincolor};
     &::after {
-      content: '';
+      content: "";
       background: ${(props) => props.maincolor};
       width: 3px;
       height: inherit;

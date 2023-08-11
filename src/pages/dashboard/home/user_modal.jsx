@@ -58,7 +58,6 @@ export default function UserModal({handleModalClose,modal_open,setSnackbarMessag
 
       const response = await update_user({data:values,user_id:modal_open.id});
 
-      console.log(response);
 
       if (response?.error) {
         return setErrorMessage("Please validate the entered data");
