@@ -1,21 +1,16 @@
-import { useMemo, useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import {  useState } from "react";
+import {  useNavigate } from "react-router-dom";
 // mui
-import { Alert, Link, CardActions } from "@mui/material";
+import { Alert, CardActions } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 // form and its validation
 import { useFormik } from "formik";
 import * as Yup from "yup";
 // components
 import Input from "../../../components/form/input";
-import _ from "lodash";
 import {
-  useLazyUserDetailsQuery,
-  useLoginUserMutation,
   useRegisterUserMutation,
 } from "../redux/auth.api";
-import { useDispatch } from "react-redux";
-import { login } from "../redux/auth.slice";
 
 // ----------------------------------------------------------------------
 
@@ -57,14 +52,14 @@ const RegisterForm = () => {
       phone: Yup.string().required("Phone Number cannot be empty"),
       email: Yup.string().email().required("Email cannot be empty"),
       password: Yup.string()
-        .required("No password provided")
-        .min(8, "Password must be 8 characters long"),
+      .required("No password provided")
+      .min(8, "Password must be 8 characters long"),
     }),
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <div className="d-flex flex-column gap-4">
+      <div className="d-flex flex-column">
         {errorMessage && (
           <Alert sx={{ alignItems: "center" }} severity="error">
             {errorMessage}

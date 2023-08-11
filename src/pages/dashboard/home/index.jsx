@@ -8,6 +8,7 @@ import UserModal from "./user_modal";
 import TabNavigation from "../../../components/tabNavigation";
 import BoxedInfo from "../../../components/boxedInfo";
 import User from "./user";
+import Musics from "./musics"
 
 import {
   Pagination,
@@ -102,8 +103,27 @@ const Home = () => {
   } = useListUsersQuery({
     page: currentPage,
     role: tab === "managers" ? 2 : "artists" === tab ? 3 : 1,
-  });
-  return (
+  },{skip:role ===3});
+
+
+  return searchParams.get("id") || role === 3 ? <>
+      <Snackbar
+        open={snacbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {snacbarMessage}
+        </Alert>
+      </Snackbar>
+<Musics setSnackbarMesage={setSnackbarMesage}/>
+</>: (
+
     <>
       <TabNavigation
         tabs={tabs}

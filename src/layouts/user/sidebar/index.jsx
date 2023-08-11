@@ -3,8 +3,9 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../../pages/auth/redux/auth.slice";
 import { apiSlice, apiTags } from "../../../app/apiSlice";
 // mui
+
 import { GroupOutlined, LogoutOutlined } from "@mui/icons-material";
-import { useTheme } from "@mui/material";
+import { useTheme,Typography } from "@mui/material";
 // styles
 import {
   SidebarContainer,
@@ -49,12 +50,7 @@ const Sidebar = ({ isOpenSidebar }) => {
     <SidebarContainer isopen={isOpenSidebar}>
       <SidebarWrapper>
         <SidebarHeader>
-          <Link
-            className="d-flex flex-row align-items-baseline flex-wrap gap-2"
-            to="/dashboard/home"
-          >
-            <SidebarHeaderLogo>Logo</SidebarHeaderLogo>
-          </Link>
+          <Typography variant="body1">{user.email}</Typography>
         </SidebarHeader>
         <div className="d-flex flex-column">
           <ul className="m-0">

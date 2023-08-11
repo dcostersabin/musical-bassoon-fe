@@ -80,7 +80,6 @@ export const AuthRightSide = styled(Box)`
 `;
 
 export const LoginRightSide = styled(AuthRightSide)`
-  margin-top: -100px;
   margin-left: 5%;
   margin-right: 5%;
   width: 100%;

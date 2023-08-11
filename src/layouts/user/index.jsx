@@ -10,6 +10,7 @@ import Sidebar from './sidebar';
 
 const MainStyle = styled.main`
   flex-grow: 1;
+  margin-top:10px;
   padding-left: 16;
   padding-right: 16;
   width: 'calc(100% - 300px)';

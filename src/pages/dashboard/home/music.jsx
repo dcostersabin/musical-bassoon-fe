@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 // mui
 import {
   styled,
@@ -16,9 +15,10 @@ import {
 import { tableCellClasses } from "@mui/material/TableCell";
 import { MoreVert, Update } from "@mui/icons-material";
 // icons and images
-import { Eye, Trash } from "@phosphor-icons/react";
+import { Trash } from "@phosphor-icons/react";
+import MusicAddModal from "./music_create_modal"
 
-import { useDeleteUserMutation } from "../redux/dashboard.api";
+import { useAddMusicMutation, useDeleteMusicMutation, useUpdateMusicMutation } from "../redux/music.api";
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
     fontWeight: 600,
   },
-  padding: "20px",
+  padding: "15px",
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontWeight: 500,
@@ -48,8 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const User = ({ row, setSnackbarMesage, handleModalOpen, role }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const Music = ({ row,setSnackbarMesage,handleModalOpen}) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const menuOpen = Boolean(anchorEl);
@@ -62,32 +61,23 @@ const User = ({ row, setSnackbarMesage, handleModalOpen, role }) => {
     setAnchorEl(null);
   };
 
-  const showUserDetail = () => {
-    searchParams.set("id", row?.id);
-    searchParams.set("page",1);
-    setSearchParams(searchParams);
-  };
+  const [deleteMusic] = useDeleteMusicMutation();
 
-  const [deleteUser] = useDeleteUserMutation();
 
   return (
     <StyledTableRow>
       <StyledTableCell component="th" scope="row">
         <Typography variant="sideInfo">
-          {row?.first_name} {row?.last_name}
+          {row?.album_name}
         </Typography>
       </StyledTableCell>
       <StyledTableCell align="center">
-        <Typography variant="sideInfo">{row?.email}</Typography>
+        <Typography variant="sideInfo">{row?.title}</Typography>
       </StyledTableCell>
       <StyledTableCell align="center">
-        <Typography variant="sideInfo">{row?.phone}</Typography>
-      </StyledTableCell>
-      <StyledTableCell>
-        {row?.gender === "M" ? "Male" : row?.gender === "F" ? "False" : "Other"}
+        <Typography variant="sideInfo">{row?.genre}</Typography>
       </StyledTableCell>
       <StyledTableCell>{row?.created_at}</StyledTableCell>
-      <StyledTableCell>{row?.updated_at}</StyledTableCell>
       <StyledTableCell>
         <Stack direction={"row"} justifyContent={"center"} gap={"14px"}>
           <Box sx={{ flex: "1 0 10% " }}>
@@ -106,27 +96,8 @@ const User = ({ row, setSnackbarMesage, handleModalOpen, role }) => {
             open={menuOpen}
             onClose={handleMenuClose}
           >
-            {(searchParams.get("tab") === "artists" ||
-              row?.role === 3) && (
-                <MenuItem
-                  onClick={() => {
-                    showUserDetail();
-                    handleMenuClose();
-                  }}
-                >
-                  <ListItemIcon>
-                    <Eye size={18} weight="bold" />
-                  </ListItemIcon>
-                  <Typography
-                    sx={{ lineHeight: "1", padding: "4px 0px" }}
-                    variant="subtitle4"
-                  >
-                    View Songs
-                  </Typography>
-                </MenuItem>
-              )}
             <MenuItem
-              onClick={() => {
+              onClick={()=>{
                 handleModalOpen(row);
                 handleMenuClose();
               }}
@@ -142,11 +113,7 @@ const User = ({ row, setSnackbarMesage, handleModalOpen, role }) => {
               </Typography>
             </MenuItem>
             <MenuItem
-              onClick={() => {
-                deleteUser({ id: row.id });
-                setSnackbarMesage("Successfully Deleted");
-                handleMenuClose();
-              }}
+              onClick={()=>{deleteMusic({music_id:row.id});setSnackbarMesage("Music Deleted Successfully");handleMenuClose()}}
             >
               <ListItemIcon>
                 <Trash size={18} weight="bold" />
@@ -165,4 +132,4 @@ const User = ({ row, setSnackbarMesage, handleModalOpen, role }) => {
   );
 };
 
-export default User;
+export default Music;
