@@ -29,3 +29,11 @@ Open your browser and go to the following address: http://localhost:3000. Once t
 
 Kindly locate the exemplar environment variable within the __.example.env__ file.
 
+
+## Screenshots
+
+![Login Screen](https://github.com/dcostersabin/musical-bassoon-fe/blob/main/assets/login.png)
+
+![Register Screen](https://github.com/dcostersabin/musical-bassoon-fe/blob/main/assets/register.png)
+
+
