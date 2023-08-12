@@ -120,9 +120,11 @@ export default function Musics({setSnackbarMesage}) {
           hasHeader={false}
         >
         <div>
-                          <Button variant="outlined" onClick={()=>(dump())}>
+        {role === 2 &&
+                          <Button classDetails="mb-2" variant="outlined" onClick={()=>(dump())}>
                 Export Data
               </Button>
+              }
 
         </div>
           <TableContainer component={Paper}>
