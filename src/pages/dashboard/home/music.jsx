@@ -47,7 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const Music = ({ row,setSnackbarMesage,handleModalOpen}) => {
+const Music = ({ role,row,setSnackbarMesage,handleModalOpen}) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const menuOpen = Boolean(anchorEl);
@@ -61,7 +61,6 @@ const Music = ({ row,setSnackbarMesage,handleModalOpen}) => {
   };
 
   const [deleteMusic] = useDeleteMusicMutation();
-
 
   return (
     <StyledTableRow>
@@ -78,55 +77,60 @@ const Music = ({ row,setSnackbarMesage,handleModalOpen}) => {
       </StyledTableCell>
       <StyledTableCell>{row?.created_at}</StyledTableCell>
       <StyledTableCell>
-        <Stack direction={"row"} justifyContent={"center"} gap={"14px"}>
-          <Box sx={{ flex: "1 0 10% " }}>
-            <IconButton
-              aria-label="more"
-              id="long-button"
-              aria-haspopup="true"
-              onClick={handleMenuClick}
-            >
-              <MoreVert />
-            </IconButton>
-          </Box>
-          <Menu
-            id="long-menu"
-            anchorEl={anchorEl}
-            open={menuOpen}
-            onClose={handleMenuClose}
-          >
-            <MenuItem
-              onClick={()=>{
-                handleModalOpen(row);
-                handleMenuClose();
-              }}
-            >
-              <ListItemIcon>
-                <Update size={18} weight="bold" />
-              </ListItemIcon>
-              <Typography
-                sx={{ lineHeight: "1", padding: "4px 0px" }}
-                variant="subtitle4"
+
+        {role === 3 &&
+          <Stack direction={"row"} justifyContent={"center"} gap={"14px"}>
+            <Box sx={{ flex: "1 0 10% " }}>
+              <IconButton
+                aria-label="more"
+                id="long-button"
+                aria-haspopup="true"
+                onClick={handleMenuClick}
               >
-                Update
-              </Typography>
-            </MenuItem>
-            <MenuItem
-              onClick={()=>{deleteMusic({music_id:row.id});setSnackbarMesage("Music Deleted Successfully");handleMenuClose()}}
+                <MoreVert />
+              </IconButton>
+            </Box>
+            <Menu
+              id="long-menu"
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
             >
-              <ListItemIcon>
-                <Trash size={18} weight="bold" />
-              </ListItemIcon>
-              <Typography
-                sx={{ lineHeight: "1", padding: "4px 0px" }}
-                variant="subtitle4"
+              <MenuItem
+                onClick={()=>{
+                  handleModalOpen(row);
+                  handleMenuClose();
+                }}
               >
-                Delete
-              </Typography>
-            </MenuItem>
-          </Menu>
-        </Stack>
+                <ListItemIcon>
+                  <Update size={18} weight="bold" />
+                </ListItemIcon>
+                <Typography
+                  sx={{ lineHeight: "1", padding: "4px 0px" }}
+                  variant="subtitle4"
+                >
+                  Update
+                </Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={()=>{deleteMusic({music_id:row.id});setSnackbarMesage("Music Deleted Successfully");handleMenuClose()}}
+              >
+                <ListItemIcon>
+                  <Trash size={18} weight="bold" />
+                </ListItemIcon>
+                <Typography
+                  sx={{ lineHeight: "1", padding: "4px 0px" }}
+                  variant="subtitle4"
+                >
+                  Delete
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Stack>
+
+        }
       </StyledTableCell>
+
     </StyledTableRow>
   );
 };

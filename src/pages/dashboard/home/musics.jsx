@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import BoxedInfo from "../../../components/boxedInfo";
 import MusicUpdateModal from "./music_update_modal"
 import MusicAddModal from "./music_create_modal"
+import {useLazyDumpMusicQuery} from "../redux/dump.api"
 import {
   Button,
   Pagination,
@@ -46,7 +47,7 @@ export default function Musics({setSnackbarMesage}) {
 
   const music_id = searchParams.get("id");
 
-  const { id } = useSelector((state) => state.auth.user);
+  const { id,role} = useSelector((state) => state.auth.user);
 
   const currentPage = parseInt(searchParams.get("page")) || 1;
 
@@ -54,6 +55,37 @@ export default function Musics({setSnackbarMesage}) {
     user_id: music_id || id,
     page: currentPage,
   });
+
+  const [trigger] = useLazyDumpMusicQuery();
+
+  const dump = async ()=>{
+
+    const response = await trigger({artist_id:music_id,page:currentPage});
+    console.log(response);
+    if (response.isSuccess) {
+      // Create a temporary URL object from the blob
+      const url = URL.createObjectURL(response?.data);
+
+      // Create a temporary anchor element and set its href to the URL
+      const a = document.createElement('a');
+      a.href = url;
+
+      // Set the anchor element's download attribute to the file name
+      a.download = `dump.csv`;
+
+      // Programmatically click the anchor element to initiate the download
+      a.click();
+
+      // Clean up the temporary objects
+      URL.revokeObjectURL(url);
+      a.remove();
+
+      return true;
+    }
+
+    return false;
+  }
+
 
 
   const handleModalOpen = (music_data) => {
@@ -67,9 +99,11 @@ export default function Musics({setSnackbarMesage}) {
 
   return (
     <Box sx={{ padding: "0rem 1.5rem" }} >
+    {role === 3 &&
                   <Button variant="outlined" onClick={() => setMusicAddModal(true)}>
                 Add Music
               </Button>
+              }
 
       <div
         className="d-flex flex-column"
@@ -85,6 +119,12 @@ export default function Musics({setSnackbarMesage}) {
           }}
           hasHeader={false}
         >
+        <div>
+                          <Button variant="outlined" onClick={()=>(dump())}>
+                Export Data
+              </Button>
+
+        </div>
           <TableContainer component={Paper}>
             <Table aria-label="customized table">
               <TableHead>
@@ -98,7 +138,7 @@ export default function Musics({setSnackbarMesage}) {
               </TableHead>
               <TableBody sx={{ minHeight: "420px" }}>
                 {currentData?.music?.map((row, idx) => {
-                  return <Music row={row} key={idx} setSnackbarMesage={setSnackbarMesage} handleModalOpen={handleModalOpen}
+                  return <Music role={role} row={row} key={idx} setSnackbarMesage={setSnackbarMesage} handleModalOpen={handleModalOpen}
                   />;
                 })}
               </TableBody>
