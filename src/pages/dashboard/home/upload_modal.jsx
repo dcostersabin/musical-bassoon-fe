@@ -28,7 +28,7 @@ export default function UploadModal({
   modal_open,
   setUploadAlerts,
 }) {
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage] = useState(null);
   const [register_user] = useRegisterUserMutation();
   const [upload_music] = useUploadMusicMutation();
 
@@ -92,13 +92,11 @@ export default function UploadModal({
               setUploadAlerts(message)
             }
 
-          });
+            let songs = new_songs[email];
 
-          Object.entries(new_songs).map(async ([email,data],idx)=>{
+            Object.entries(songs).map(async ([idx,music])=>{
 
 
-
-            data.forEach(async music=>{
               let response = await upload_music({data:music});
 
               if (!response?.errors){
@@ -107,8 +105,10 @@ export default function UploadModal({
                 setUploadAlerts(message)
               }
 
-            });
-          })
+            })
+
+          });
+
 
           handleModalClose();
 
