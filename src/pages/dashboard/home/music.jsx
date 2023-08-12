@@ -16,9 +16,8 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import { MoreVert, Update } from "@mui/icons-material";
 // icons and images
 import { Trash } from "@phosphor-icons/react";
-import MusicAddModal from "./music_create_modal"
 
-import { useAddMusicMutation, useDeleteMusicMutation, useUpdateMusicMutation } from "../redux/music.api";
+import { useDeleteMusicMutation} from "../redux/music.api";
 
 // ----------------------------------------------------------------------
 
